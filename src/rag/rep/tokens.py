@@ -1,28 +1,37 @@
-"""REP: token counting with the EMBEDDING model's tokenizer. Owner R2.
+"""Count tokens the way the EMBEDDING model counts them.
 
-STUB(REP-04). Today a "token" is a whitespace-separated word. The real
-version uses the model's Hugging Face fast tokenizer.
+Owner: R2        Issue: REP-04 (issues/REP-04.md)
+
+Embedding models read "tokens" (pieces of words), not words, and they have a
+maximum number of tokens they can read. Chunks must fit inside that limit,
+so the chunkers use these three functions to measure text.
+
+STUB: right now a "token" is just a word separated by spaces.
 """
 
 from __future__ import annotations
 
 import re
 
-_WORD = re.compile(r"\S+")
-
 
 def count_tokens(text: str, model: str) -> int:
-    """Number of tokens `text` takes in `model`, without special tokens."""
-    return len(_WORD.findall(text))  # STUB(REP-04)
+    """How many tokens `text` is for `model`."""
+    return len(text.split())  # STUB(REP-04): counts words, not real tokens
 
 
 def token_offsets(text: str, model: str) -> list[tuple[int, int]]:
-    """(start, end) character offsets of each token, so chunkers can slice
-    the original text instead of decoding token ids."""
-    return [(m.start(), m.end()) for m in _WORD.finditer(text)]  # STUB(REP-04)
+    """Where each token starts and ends in `text`, as (start, end) positions.
+
+    Chunkers use these to cut the ORIGINAL text, e.g. text[start:end].
+    """
+    # STUB(REP-04): positions of words, not real tokens
+    return [(m.start(), m.end()) for m in re.finditer(r"\S+", text)]
 
 
 def chunk_limit(model: str, prefix: str = "") -> int:
-    """The most tokens a chunk may have: the model's maximum, minus special
-    tokens, minus the tokens of the passage prefix (e.g. "passage: ")."""
-    return 510 - count_tokens(prefix, model)  # STUB(REP-04)
+    """The most tokens one chunk may have for `model`.
+
+    That is the model's maximum, minus its special tokens, minus the tokens
+    of the prefix some models need (e.g. "passage: ").
+    """
+    return 510 - count_tokens(prefix, model)  # STUB(REP-04): 510 is a guess

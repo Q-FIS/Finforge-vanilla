@@ -1,8 +1,10 @@
-"""EVAL: compare run folders side by side. Owner E2.
+"""Compare two or more runs side by side.
 
-    python -m rag.compare eval/runs/baseline eval/runs/e1_fixed_256
+Owner: E2        Issue: EVAL-07 (issues/EVAL-07.md)
 
-STUB(EVAL-07).
+    python -m rag.compare eval/runs/baseline eval/runs/fixed_256
+
+STUB: not built yet.
 """
 
 from __future__ import annotations

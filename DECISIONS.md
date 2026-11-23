@@ -1,8 +1,7 @@
 # Decisions
 
 The project's key decisions and why we made them. If a decision changes, edit
-its entry and say what changed and why; don't delete it. A blog post that
-explains one of these choices links to it here.
+its entry and say what changed and why; don't delete it.
 
 ## D1. No module may share a name with a built-in Python module
 The first plan had `types.py`, `numbers.py`, `chunk.py` and `trace.py`, and all
@@ -17,7 +16,8 @@ The project lead is the only CODEOWNER (contracts: `schema.py`, `config.py`,
 `match.py`, `amounts.py`, `registry.py`, dependencies, `.github/`). There are no
 separate team leads. A PR merges with: green CI + one approval from someone on
 the same team (is it correct?) + one fresher sign-off (can they explain it?).
-T1 and T2 have the lightest load and are the backups for Team 1's critical path.
+T1, T2 and E2 have the lightest load. They are the backups when an issue on the
+critical path (parse, clean, chunk, embed) falls behind.
 
 ## D3. One LLM: Anthropic `claude-haiku-5-5`, through the API
 Laptops can't run a 7-8B local model fast enough for ~1,200 calls per run cycle.

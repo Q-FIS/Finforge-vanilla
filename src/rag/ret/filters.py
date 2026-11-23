@@ -1,6 +1,11 @@
-"""RET: metadata filters and de-duplication. Owner T3.
+"""Read company / year / basis from a question, and use them to filter chunks.
 
-STUB(RET-08, RET-09, RET-10). Today nothing is filtered or removed.
+Owner: T3        Issues: RET-08, RET-09, RET-10
+
+Example: "What was Infosys' revenue in FY 2024-25?" -> Filters(company="infosys",
+fy="FY2025"). Then only chunks with those labels are searched.
+
+STUB: nothing is extracted, nothing is filtered, nothing is removed.
 """
 
 from __future__ import annotations
@@ -11,17 +16,16 @@ from rag.schema import Chunk, Filters, Hit, RegistryEntry
 
 
 def extract_filters(question: str, registry: dict[str, RegistryEntry]) -> Filters:
-    """Company (via registry aliases), FY ("FY 2024-25" -> "FY2025") and basis
-    from the question's words. Ambiguous (two companies/years) -> None."""
-    return Filters(source="extracted")  # STUB(RET-08)
+    """Find the company, financial year and basis the question asks about.
+    Leave a field as None when the question does not say, or is ambiguous."""
+    return Filters(source="extracted")  # STUB(RET-08): finds nothing yet
 
 
 def allowed_mask(chunks: list[Chunk], filters: Filters) -> np.ndarray:
-    """Boolean mask: True where a chunk matches every non-None filter."""
-    return np.ones(len(chunks), dtype=bool)  # STUB(RET-09)
+    """One True/False per chunk: True if the chunk matches every filter."""
+    return np.ones(len(chunks), dtype=bool)  # STUB(RET-09): everything allowed
 
 
 def dedupe(hits: list[Hit]) -> list[Hit]:
-    """Drop hits that mostly repeat a better-ranked hit (overlapping chunks),
-    then renumber ranks from 1."""
-    return hits  # STUB(RET-10)
+    """Remove hits that mostly repeat a better hit (overlapping chunks)."""
+    return hits  # STUB(RET-10): nothing removed

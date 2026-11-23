@@ -1,48 +1,56 @@
-"""GEN: the language-model client. Owner G1.
+"""Talk to the language model (the LLM).
 
-`FakeLLM` is real and permanent: CI, the skeleton and GEN-06's tests use it.
-STUB(GEN-01): the real client (DECISIONS.md D3: Anthropic, claude-haiku-5-5,
-key in the ANTHROPIC_API_KEY environment variable), with cache and call log.
+Owner: G1        Issue: GEN-01 (issues/GEN-01.md)
+
+complete(messages) sends a conversation to the model and returns two
+things: the model's reply text, and a Usage record (tokens, time, cost).
+
+FakeLLM is finished and stays forever: tests use it so they never need an
+API key. STUB: the real client (Anthropic, model claude-haiku-5-5).
 """
 
 from __future__ import annotations
 
 import json
 import time
-from collections.abc import Iterator
-from itertools import cycle
-from typing import Protocol
 
 from rag.config import LLMConfig
 from rag.schema import Usage
 
-Message = dict[str, str]  # {"role": "system" | "user" | "assistant", "content": "..."}
+# A message looks like {"role": "user", "content": "What was revenue?"}.
+# role is "system", "user" or "assistant".
+Message = dict[str, str]
 
 
-class LLM(Protocol):
+class LLM:
+    """What every LLM client has: a complete() method."""
+
     def complete(self, messages: list[Message]) -> tuple[str, Usage]:
-        """Return the model's raw text and what the call cost.
-        Usage.prompt_version is left "" for the caller to fill in."""
-        ...
+        raise NotImplementedError
 
 
-class FakeLLM:
-    """Answers without a model. By default it cites [C1] if the prompt has a
-    [C1] passage and abstains otherwise. Pass `responses` to script exact
-    outputs (e.g. broken JSON for parser tests); they are returned in turn."""
+class FakeLLM(LLM):
+    """A pretend model that needs no API key.
 
-    model_name = "fake-llm"
+    By default: if the prompt contains a passage tagged [C1], it "answers"
+    and cites [C1]; otherwise it says there is not enough evidence.
 
-    def __init__(self, responses: list[str] | None = None) -> None:
-        self._scripted: Iterator[str] | None = cycle(responses) if responses else None
+    For tests you can give it exact replies to return, one per call:
+        FakeLLM(replies=["not json", '{"status": "answered", ...}'])
+    """
+
+    def __init__(self, replies: list[str] | None = None) -> None:
+        self.replies = replies or []
+        self.calls = 0
 
     def complete(self, messages: list[Message]) -> tuple[str, Usage]:
         start = time.perf_counter()
-        prompt = "\n".join(m["content"] for m in messages)
-        if self._scripted is not None:
-            text = next(self._scripted)
+        prompt = "\n".join(message["content"] for message in messages)
+
+        if self.replies:
+            reply = self.replies[self.calls % len(self.replies)]
         elif "[C1]" in prompt:
-            text = json.dumps(
+            reply = json.dumps(
                 {
                     "status": "answered",
                     "answer": "Fake answer [C1]",
@@ -50,22 +58,23 @@ class FakeLLM:
                 }
             )
         else:
-            text = json.dumps({"status": "insufficient_evidence", "answer": "", "citations": []})
+            reply = json.dumps({"status": "insufficient_evidence", "answer": "", "citations": []})
+        self.calls += 1
+
         usage = Usage(
-            model=self.model_name,
-            prompt_version="",
+            model="fake-llm",
+            prompt_version="",  # generate_answer() fills this in
             tokens_in=len(prompt.split()),
-            tokens_out=len(text.split()),
+            tokens_out=len(reply.split()),
             latency_ms=(time.perf_counter() - start) * 1000,
             cached=False,
         )
-        return text, usage
+        return reply, usage
 
 
 def get_llm(cfg: LLMConfig) -> LLM:
+    """The LLM client the config asks for."""
     if cfg.fake:
         return FakeLLM()
-    raise NotImplementedError(
-        f"The real client ({cfg.provider}/{cfg.model}) is issue GEN-01. "
-        "Set llm.fake: true until then."
-    )
+    # STUB(GEN-01): return the real Anthropic client here.
+    raise NotImplementedError("The real LLM client is issue GEN-01. Use llm.fake: true for now.")

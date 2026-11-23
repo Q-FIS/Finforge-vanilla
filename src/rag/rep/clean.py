@@ -1,6 +1,12 @@
-"""REP: Document -> cleaned Document. Owner R1.
+"""Step 2: clean the text of a parsed Document.
 
-STUB(REP-02). Today the document passes through unchanged.
+Owner: R1        Issue: REP-02 (issues/REP-02.md)
+
+Cleaning fixes things like broken hyphenation and repeated headers, but
+must never change figures: "₹", "crore", "1,45,000", "(1,234)" and "—"
+stay exactly as they are.
+
+STUB: right now the document is returned unchanged.
 """
 
 from __future__ import annotations
@@ -10,9 +16,5 @@ from rag.schema import Document
 
 
 def clean_document(doc: Document, cfg: CleanConfig) -> Document:
-    """NFKC, whitespace, line-break hyphens, headers/footers, page labels.
-
-    Contract: never changes the number of pages; keeps "₹", "crore",
-    "1,45,000", "(1,234)" and "—" exactly as they are.
-    """
-    return doc  # STUB(REP-02)
+    """Return the cleaned Document. It must have the same number of pages."""
+    return doc  # STUB(REP-02): nothing is cleaned yet

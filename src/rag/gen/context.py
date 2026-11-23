@@ -1,7 +1,12 @@
-"""GEN: hits -> the <context> block of the prompt. Owner G2.
+"""Step 7: put the retrieved chunks into the prompt, as tagged passages.
 
-STUB(GEN-05). Today every hit goes in, tokens are counted as words, and
-there is no budget.
+Owner: G2        Issue: GEN-05 (issues/GEN-05.md)
+
+Each chunk becomes a passage tagged [C1], [C2], ... so the model can cite
+it. The passages must fit in a token budget (cfg.max_tokens); a passage that
+does not fit is left out and recorded in Context.dropped, never cut silently.
+
+STUB: every hit goes in, there is no budget, and tokens are counted as words.
 """
 
 from __future__ import annotations
@@ -11,13 +16,13 @@ from rag.schema import Context, Hit, Passage
 
 
 def build_context(hits: list[Hit], cfg: ContextConfig) -> Context:
-    """Tag passages [C1], [C2]... in rank order until cfg.max_tokens (LLM
-    tokens) is used. A passage that does not fit is dropped and recorded in
-    Context.dropped as (chunk_id, "budget"); none is cut silently."""
-    passages, blocks = [], []
-    for i, hit in enumerate(hits, start=1):  # STUB(GEN-05): no budget, no source line
-        tag = f"C{i}"
-        passages.append(Passage(tag, hit.chunk, len(hit.chunk.text.split())))
-        blocks.append(f"[{tag}]\n{hit.chunk.text}")
-    text = "<context>\n" + "\n\n".join(blocks) + "\n</context>"
+    """Turn hits (best first) into the <context> ... </context> text."""
+    passages = []
+    parts = []
+    for number, hit in enumerate(hits, start=1):  # STUB(GEN-05): no budget yet
+        tag = f"C{number}"
+        passages.append(Passage(tag=tag, chunk=hit.chunk, n_tokens=len(hit.chunk.text.split())))
+        parts.append(f"[{tag}]\n{hit.chunk.text}")
+
+    text = "<context>\n" + "\n\n".join(parts) + "\n</context>"
     return Context(passages=passages, text=text, n_tokens=len(text.split()))

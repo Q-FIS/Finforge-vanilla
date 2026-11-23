@@ -34,15 +34,18 @@ from difflib import SequenceMatcher
 RELEVANT = 0.5  # a chunk holding at least half the quote (e.g. split in two)
 ON_PAGE = 0.9  # a hand-copied quote, allowing small copy differences
 
-# Curly quotes, primes and the many Unicode dashes all become plain ASCII.
-# Only for matching: the stored text itself is never changed.
-_SINGLE = "\u2018\u2019\u201a\u201b\u2032"  # curly single quotes, prime
-_DOUBLE = "\u201c\u201d\u201e\u201f\u2033"  # curly double quotes, double prime
-_DASH = "\u2010\u2011\u2012\u2013\u2014\u2015\u2212"  # hyphens, en/em dash, minus
-_TRANSLATE = str.maketrans(
-    {**dict.fromkeys(_SINGLE, "'"), **dict.fromkeys(_DOUBLE, '"'), **dict.fromkeys(_DASH, "-")}
-)
-_SOFT_HYPHEN = "\u00ad"  # invisible hyphenation hint some PDFs contain
+# Characters that look alike but are different in Unicode. For matching
+# only, we turn them into one plain version. (The stored text never changes.)
+LOOKALIKES = {
+    "\u2018": "'",  # left single quote
+    "\u2019": "'",  # right single quote / apostrophe
+    "\u201c": '"',  # left double quote
+    "\u201d": '"',  # right double quote
+    "\u2013": "-",  # en dash
+    "\u2014": "-",  # em dash
+    "\u2212": "-",  # minus sign
+    "\u00ad": "",  # soft hyphen (invisible)
+}
 # A word broken across a line: "opera-\ntions" or "opera- tions" -> "operations".
 # Letters on both sides only, so "2024-25" and "(1,234)" are untouched.
 _LINE_HYPHEN = re.compile(r"(?<=[^\W\d_])-\s+(?=[^\W\d_])")
@@ -61,8 +64,9 @@ def normalize(text: str) -> str:
     Does NOT touch digits, commas, brackets, "₹" or "%": "1,45,000" and
     "(1,234)" stay exactly as written, because figures must match exactly.
     """
-    text = unicodedata.normalize("NFKC", text).replace(_SOFT_HYPHEN, "")
-    text = text.translate(_TRANSLATE)
+    text = unicodedata.normalize("NFKC", text)
+    for odd, plain in LOOKALIKES.items():
+        text = text.replace(odd, plain)
     text = _LINE_HYPHEN.sub("", text)
     text = _SPACES.sub(" ", text).strip()
     return text.casefold()

@@ -53,6 +53,11 @@ body:
         - [ ]
     validations:
       required: true
+  - type: textarea
+    id: learn
+    attributes:
+      label: Learn first
+      description: What to understand before writing code. Reviewers will ask about it.
   - type: input
     id: needs
     attributes:

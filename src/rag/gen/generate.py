@@ -1,13 +1,19 @@
-"""GEN: question + context -> Answer. Owner G3.
+"""Step 8: ask the model the question, with the passages, and read its answer.
 
-STUB(GEN-03, GEN-06, GEN-07). Today: a placeholder prompt, a single
-json.loads, no retry.
+Owner: G3        Issues: GEN-06 (parse the answer), GEN-07 (this function)
+Prompt text: G1, issue GEN-03
+
+The model must reply with JSON like:
+    {"status": "answered", "answer": "₹1,45,000 crore [C1]",
+     "citations": [{"tag": "C1", "quote": "Revenue from operations 1,45,000"}]}
+
+STUB: a placeholder prompt, and if the reply is not valid JSON we give up
+straight away (the real version retries once).
 """
 
 from __future__ import annotations
 
 import json
-from dataclasses import replace
 
 from rag.config import PromptConfig
 from rag.gen.llm import LLM
@@ -15,22 +21,25 @@ from rag.schema import Answer, Citation, Context
 
 
 def generate_answer(question: str, context: Context, llm: LLM, cfg: PromptConfig) -> Answer:
-    """Render the prompt, call the model, parse its JSON into an Answer.
-    Invalid JSON is retried once; a second failure gives status "error"."""
-    messages = [  # STUB(GEN-03): the real template lives in gen/prompts/
-        {"role": "system", "content": "Answer only from the passages. Return JSON."},
+    """Build the prompt, call the model, and turn its reply into an Answer."""
+    messages = [  # STUB(GEN-03): the real prompt will live in gen/prompts/
+        {"role": "system", "content": "Answer only from the passages. Reply in JSON."},
         {"role": "user", "content": f"{context.text}\n\nQuestion: {question}"},
     ]
-    raw, usage = llm.complete(messages)
-    usage = replace(usage, prompt_version=cfg.template)
-    try:  # STUB(GEN-06): no validation, no retry
-        data = json.loads(raw)
+    reply, usage = llm.complete(messages)
+    usage.prompt_version = cfg.template
+
+    try:  # STUB(GEN-06): no checking of the JSON, no retry
+        data = json.loads(reply)
+        citations = [Citation(tag=c["tag"], quote=c.get("quote", "")) for c in data["citations"]]
         return Answer(
             status=data["status"],
             text=data.get("answer", ""),
-            citations=[Citation(c["tag"], c.get("quote", "")) for c in data.get("citations", [])],
-            raw=raw,
+            citations=citations,
+            raw=reply,
             usage=usage,
         )
-    except (ValueError, KeyError, TypeError) as e:
-        return Answer(status="error", text="", citations=[], raw=raw, usage=usage, error=str(e))
+    except (ValueError, KeyError, TypeError) as error:
+        return Answer(
+            status="error", text="", citations=[], raw=reply, usage=usage, error=str(error)
+        )

@@ -1,9 +1,9 @@
 # Vanilla RAG from scratch
 
-A retrieval-augmented question-answering system over Indian companies' annual
-reports, built by hand by the club in 18 days, and written up as the blog
-series *Build and Understand RAG from Scratch*. Every stage is written by hand
-first, then checked against a library.
+A question-answering system over Indian companies' annual reports (a "RAG":
+retrieval-augmented generation), built by hand by the club in 18 days. Every
+step is written by hand first, then checked against a library, so everyone
+understands how it really works.
 
     PDF -> parse -> clean -> chunk -> metadata -> embed -> index
         -> retrieve -> build context -> generate -> check citations -> score
@@ -25,8 +25,8 @@ models, and writes `.cache/runs/smoke/`. Open its `results.jsonl` and
 
 ## How you work
 
-1. **Pick an issue** from your team's column on the board and assign it to
-   yourself. One in progress at a time.
+1. **Read your issue** in `issues/` (or on GitHub). It says what to build,
+   which file, and how you know you're done. One issue in progress at a time.
 2. **Branch:** `git switch -c rep/REP-01-parser` (team / issue ID / short name).
 3. **Find your stub:** `grep -rn "STUB(REP-01)" src/` shows exactly what to replace.
    Don't change a public function's name or arguments: other teams call it.
@@ -49,11 +49,12 @@ models, and writes `.cache/runs/smoke/`. Open its `results.jsonl` and
 | `src/rag/rep/` | parse, clean, tokens, chunking, metadata, embed | Team 1 (R1-R4) |
 | `src/rag/ret/` | tfidf, retrieve, filters, metrics | Team 2 (T1-T4) |
 | `src/rag/gen/` | llm, context, generate, citations | Team 3 (G1-G4) |
-| `src/rag/run.py`, `score.py`, `failure_trace.py`, `compare.py` | Runs and evaluation | Team 4 (E1-E3), G1 |
+| `src/rag/run.py`, `score.py`, `failure_trace.py`, `compare.py` | Runs and evaluation | Team 4 (E1-E3), G1 (`score.py`) |
 | `config.yaml` | Every setting. Experiments copy it and change one value | |
 | `data/registry.csv` | The 6 annual reports (PDFs go in `data/pdfs/`, never in git) | E1 |
 | `eval/questions.jsonl` | The evaluation questions | everyone writes, E1 checks |
 | `tests/fixtures/` | Synthetic report, its expected output, sample questions | |
+| `issues/` | Every task, written out step by step | lead |
 | `DECISIONS.md` | Why things are the way they are | lead |
 
 ## Rules

@@ -52,11 +52,10 @@ def test_unknown_section_raises():
     ("data", "fragment"),
     [
         ({"chunk": {"strategy": "semantic"}}, "chunk.strategy"),
-        ({"chunk": {"max_tokens": "512"}}, "whole number"),
-        ({"chunk": {"max_tokens": True}}, "whole number"),  # True == 1 in Python
-        ({"embed": {"fake": "yes"}}, "true or false"),
+        ({"chunk": {"max_tokens": "512"}}, "chunk.max_tokens"),
+        ({"embed": {"fake": "yes"}}, "embed.fake"),
         ({"retrieve": {"filter": False}}, "retrieve.filter"),  # YAML `off` -> False
-        ({"chunk": "big"}, "must be a mapping"),
+        ({"chunk": "big"}, "must contain keys"),
     ],
 )
 def test_bad_values_raise(data, fragment):

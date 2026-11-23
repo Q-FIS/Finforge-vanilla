@@ -30,7 +30,7 @@ def test_fake_llm_cites_when_there_is_context():
 
 
 def test_fake_llm_scripted_responses_cycle():
-    llm = FakeLLM(responses=["not json", '{"status": "error"}'])
+    llm = FakeLLM(replies=["not json", '{"status": "error"}'])
     msgs = [{"role": "user", "content": "x"}]
     assert [llm.complete(msgs)[0] for _ in range(3)] == [
         "not json",
