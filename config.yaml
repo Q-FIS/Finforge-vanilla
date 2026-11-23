@@ -1,0 +1,57 @@
+# Every setting of a run lives here, not in code. Experiments copy this file
+# and change one value. Unknown keys are an error (see src/rag/config.py).
+run_name: baseline
+
+corpus:
+  registry: data/registry.csv
+  pdf_dir: data/pdfs
+
+parse:
+  min_chars_text_layer: 50       # fewer characters on a page -> no_text_layer
+
+clean:
+  remove_headers_footers: true
+  header_footer_min_share: 0.4   # repeats on >= 40% of pages -> header/footer
+
+chunk:
+  strategy: section              # fixed | sentence | section
+  max_tokens: 512                # capped by the model's limit minus the prefix
+  overlap_tokens: 50             # fixed only
+  overlap_sentences: 1           # sentence only
+  prepend_header: false          # E2: header goes into the embedded text only
+
+embed:
+  model: BAAI/bge-small-en-v1.5
+  query_prefix: ""               # e5: "query: "
+  passage_prefix: ""             # e5: "passage: "
+  batch_size: 64
+  fake: false
+
+retrieve:
+  method: dense                  # dense | tfidf | oracle | none (closed-book)
+  k: 5
+  depth: 20                      # always fetched, for the trace
+  filter: none                   # none | pre | post
+  filter_source: extracted       # extracted | oracle
+  dedupe: true
+
+context:
+  max_tokens: 3000
+  order: rank                    # rank | gold_at:<i> (E8)
+
+llm:
+  provider: anthropic            # DECISIONS.md D3; key in env ANTHROPIC_API_KEY
+  model: claude-haiku-5-5
+  temperature: 0
+  max_tokens: 512
+  timeout_s: 60
+  cache: true                    # false for E0 (noise floor)
+  fake: false
+
+prompt:
+  template: grounded_v1
+
+eval:
+  questions: eval/questions.jsonl
+  split: dev                     # test is locked: needs --final
+  runs_dir: eval/runs

@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - name: Install dependencies (exactly as locked)
+        run: uv sync --locked
+      - name: Formatting
+        run: uv run ruff format --check
+      - name: Lint
+        run: uv run ruff check
+      - name: Tests
+        run: uv run pytest
+      - name: Pipeline smoke run (fake embedder + fake LLM)
+        run: uv run python -m rag.run --config tests/ci.yaml --name smoke

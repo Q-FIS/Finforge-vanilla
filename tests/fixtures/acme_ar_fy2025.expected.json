@@ -1,0 +1,135 @@
+{
+  "doc_id": "acme_ar_fy2025",
+  "page_count": 6,
+  "headings": [
+    "Directors' Report",
+    "Management Discussion and Analysis",
+    "Consolidated Statement of Profit and Loss for the year ended March 31, 2025",
+    "Standalone Statement of Profit and Loss for the year ended March 31, 2025",
+    "Notes to the Standalone Financial Statements",
+    "Note 32: Exceptional items"
+  ],
+  "pages": [
+    {
+      "page": 1,
+      "status": "ok",
+      "in_order": [
+        "Directors' Report",
+        "Your Directors present the 40th Annual Report of Acme Industries Limited for the financial year ended March 31, 2025. Revenue from operations grew 20.8% to ₹1,45,000 crore, compared with ₹1,20,000 crore in the previous year.",
+        "The increase was primarily attributable to higher domestic sales. Acme Chemicals Private Limited, a wholly owned subsidiary, contributed ₹12,500 crore to consolidated revenue.",
+        "The Company had 23,450 employees as on March 31, 2025."
+      ],
+      "header_footer": [
+        "Acme Industries Limited | Annual Report 2024-25",
+        "210"
+      ],
+      "label": "210"
+    },
+    {
+      "page": 2,
+      "status": "ok",
+      "in_order": [
+        "Management Discussion and Analysis",
+        "Domestic demand stayed strong through the year, led by public infrastructure spending and steady housing construction.",
+        "Input costs eased in the second half of the year, which helped operating margins recover to their earlier levels.",
+        "Exports fell 4% because of weaker demand in Europe and longer shipping times through the Red Sea.",
+        "The outlook for FY2026 remains positive, subject to normal monsoon conditions and stable commodity prices."
+      ],
+      "header_footer": [
+        "Acme Industries Limited | Annual Report 2024-25",
+        "211"
+      ],
+      "label": "211"
+    },
+    {
+      "page": 3,
+      "status": "ok",
+      "in_order": [
+        "Consolidated Statement of Profit and Loss for the year ended March 31, 2025",
+        "(₹ in crore)",
+        "Particulars",
+        "FY2025",
+        "FY2024",
+        "Revenue from operations",
+        "1,45,000",
+        "1,20,000",
+        "Other income",
+        "2,300",
+        "1,950",
+        "Total income",
+        "1,47,300",
+        "1,21,950",
+        "Profit for the year",
+        "18,200",
+        "15,400"
+      ],
+      "header_footer": [
+        "Acme Industries Limited | Annual Report 2024-25",
+        "212"
+      ],
+      "label": "212"
+    },
+    {
+      "page": 4,
+      "status": "ok",
+      "in_order": [
+        "Standalone Statement of Profit and Loss for the year ended March 31, 2025",
+        "(₹ in crore)",
+        "Particulars",
+        "FY2025",
+        "FY2024",
+        "Revenue from operations",
+        "1,32,500",
+        "1,10,000",
+        "Other income",
+        "2,100",
+        "1,800",
+        "Total income",
+        "1,34,600",
+        "1,11,800",
+        "Profit for the year",
+        "16,900",
+        "14,300"
+      ],
+      "header_footer": [
+        "Acme Industries Limited | Annual Report 2024-25",
+        "213"
+      ],
+      "label": "213"
+    },
+    {
+      "page": 5,
+      "status": "ok",
+      "in_order": [
+        "Notes to the Standalone Financial Statements",
+        "Note 32: Exceptional items",
+        "(₹ in crore)",
+        "Particulars",
+        "FY2025",
+        "FY2024",
+        "Impairment of investment in subsidiary",
+        "(1,234)",
+        "—",
+        "Gain on sale of land",
+        "850",
+        "—",
+        "Net exceptional items",
+        "(384)",
+        "—",
+        "Figures in brackets denote negative amounts. '—' denotes nil."
+      ],
+      "header_footer": [
+        "Acme Industries Limited | Annual Report 2024-25",
+        "214"
+      ],
+      "label": "214"
+    },
+    {
+      "page": 6,
+      "status": "no_text_layer",
+      "in_order": [],
+      "header_footer": [],
+      "label": ""
+    }
+  ]
+}

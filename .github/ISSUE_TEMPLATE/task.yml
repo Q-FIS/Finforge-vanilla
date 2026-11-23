@@ -1,0 +1,61 @@
+name: Task
+description: One unit of work from the backlog (size S or M)
+title: "[ID] Short title"
+body:
+  - type: input
+    id: owner
+    attributes:
+      label: Owner role
+      placeholder: "R2"
+    validations:
+      required: true
+  - type: dropdown
+    id: size
+    attributes:
+      label: Size
+      options:
+        - "S (up to 1 day)"
+        - "M (2-3 days)"
+    validations:
+      required: true
+  - type: input
+    id: due
+    attributes:
+      label: Due day
+      placeholder: "day 6"
+    validations:
+      required: true
+  - type: textarea
+    id: where
+    attributes:
+      label: Where
+      description: File(s) and the public function signature this issue builds.
+      placeholder: "src/rag/rep/chunk.py: chunk_document(doc, cfg) -> list[Chunk]"
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What to build
+    validations:
+      required: true
+  - type: textarea
+    id: example
+    attributes:
+      label: Example input and output
+      description: Point at a fixture in tests/fixtures/ where possible.
+  - type: textarea
+    id: done
+    attributes:
+      label: Done when
+      value: |
+        - [ ]
+        - [ ]
+    validations:
+      required: true
+  - type: input
+    id: needs
+    attributes:
+      label: Needs
+      description: Hard dependencies only. Start on fixtures wherever you can.
+      placeholder: "REP-04"

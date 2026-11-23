@@ -1,0 +1,2 @@
+doc_id,company,company_name,aliases,fy,url,pages,sha256
+acme_ar_fy2025,acme,Acme Industries Limited,Acme|Acme Industries|Acme Industries Ltd,FY2025,synthetic (scripts/make_fixture_pdf.py),6,0f68290c54c21e4e9d9053a0ee81cefc18952ceda0b9041d0317b04e753b3cf3

@@ -1,0 +1,10 @@
+# Changes to these files need the project lead's review.
+# They are the contracts every team codes against.
+/src/rag/schema.py    @PrinceJha-Qua
+/src/rag/config.py    @PrinceJha-Qua
+/src/rag/match.py     @PrinceJha-Qua
+/src/rag/amounts.py   @PrinceJha-Qua
+/src/rag/registry.py  @PrinceJha-Qua
+/pyproject.toml       @PrinceJha-Qua
+/uv.lock              @PrinceJha-Qua
+/.github/             @PrinceJha-Qua
