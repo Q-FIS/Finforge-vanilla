@@ -115,6 +115,8 @@ class Page:
     blocks: list[Block] = field(default_factory=list)
     reason: str = ""  # why the status is not "ok"
     label: str = ""  # printed page number, if the cleaner found one
+    width: float = 0.0  # page size in PDF points (filled by the parser);
+    height: float = 0.0  # the cleaner uses it to find headers and footers
 
     @property
     def text(self) -> str:

@@ -42,8 +42,8 @@ context:
 llm:
   provider: anthropic            # DECISIONS.md D3; key in env ANTHROPIC_API_KEY
   model: claude-haiku-5-5
-  temperature: 0
-  max_tokens: 512
+  effort: low                    # low | medium | high (Haiku 5.5 has no temperature)
+  max_tokens: 4000               # includes the model's thinking
   timeout_s: 60
   cache: true                    # false for E0 (noise floor)
   fake: false

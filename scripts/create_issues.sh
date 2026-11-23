@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Create one GitHub issue per file in issues/ (except README.md).
+# Create one GitHub issue per task file in issues/ (REP-01.md, GEN-05.md, ...).
 # Run from the repo root, after scripts/setup_github.sh (the labels must exist).
 #
 # Each issue file looks like:
@@ -12,8 +12,7 @@
 set -euo pipefail
 
 DRY_RUN="${1:-}"
-for file in issues/*.md; do
-  [[ "$(basename "$file")" == "README.md" ]] && continue
+for file in issues/*-[0-9][0-9].md; do      # e.g. REP-01.md (skips README.md, START_HERE.md)
   title="$(head -n 1 "$file" | sed 's/^# //')"
   labels="$(sed -n '2p' "$file" | sed 's/^labels: //; s/, /,/g')"
   body="$(tail -n +3 "$file")"

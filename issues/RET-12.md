@@ -2,13 +2,17 @@
 labels: team:ret, size:S
 **Owner:** T4 · **Size:** S (1 day) · **Due:** day 9 · **Needs:** RET-11
 
-## In one sentence
-Prove our hit@k, MRR and nDCG@k give the same numbers as `ranx`.
+## What is this, in plain words?
+Like RET-03 for TF-IDF: we wrote the scores by hand, so we prove they're
+correct by comparing them with `ranx`, a well-known evaluation library.
 
-## What to do
-1. Turn one run into ranx's format: `Qrels` (which chunk ids are relevant to each question) and `Run` (each question's retrieved chunk ids with scores).
-2. Compare `hit_rate@5`, `mrr` and `ndcg@5` with ours.
-3. Our recall counts evidence items, so it won't match ranx's recall. Write one sentence in the test explaining why.
+## Step by step
+1. In `tests/ret/test_metrics_ranx.py`, take one run's results (or make a small fake one: 5 questions, 10 hits each).
+2. Build ranx's two inputs:
+   - `Qrels`: for each question, which chunk ids are relevant: `{"FX01": {"acme_ar_fy2025:p3:c0004": 1}, ...}`
+   - `Run`: for each question, the retrieved chunk ids with their scores.
+3. `ranx.evaluate(qrels, run, ["hit_rate@5", "mrr", "ndcg@5"])`, and compare with the averages of our functions.
+4. Our recall counts *evidence items* and ranx's counts *chunks*, so they differ. Write one sentence in the test explaining that, instead of comparing them.
 
 ## Done when
-- [ ] hit, MRR and nDCG match to 9 decimal places on a dev run (in `tests/ret/test_metrics_ranx.py`)
+- [ ] hit@5, MRR and nDCG@5 match ranx to 9 decimal places

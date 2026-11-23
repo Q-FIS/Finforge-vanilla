@@ -2,14 +2,19 @@
 labels: team:rep, size:S
 **Owner:** R1 · **Size:** S (1 day) · **Due:** day 11 · **Needs:** REP-05, REP-08
 
-## In one sentence
-Run LangChain's popular `RecursiveCharacterTextSplitter` on one report and compare it with our chunkers.
+## What is this, in plain words?
+Most RAG tutorials use one line of LangChain to split text:
+`RecursiveCharacterTextSplitter`. Now that we've built our own chunkers, you
+compare: what does the one-liner get wrong on a real annual report, and what
+does ours do differently?
 
-## What to do
-1. Install it just for this: `uv run --with langchain-text-splitters python ...`. Don't add it to `pyproject.toml`.
-2. Pick a size close to our 512 tokens (it counts characters: about 2,000).
-3. For it and for each of our chunkers, count: number of chunks · sentences cut in half · tables split · chunks over the token limit.
-4. Write `eval/reports/langchain_comparison.md` with the table and 3-5 sentences explaining the differences.
+## Step by step
+1. Run it without adding it to our project:
+   `uv run --with langchain-text-splitters python your_script.py`
+2. It counts **characters**, not tokens. Use `chunk_size=2000, chunk_overlap=200` (roughly 512 and 50 tokens).
+3. Run it, and each of our three chunkers, on the same cleaned real report.
+4. For each, count: number of chunks · chunks over 512 tokens (use our `count_tokens`) · sentences cut in half (a chunk that ends without `.`, `?` or `!`) · table rows split from their label.
+5. Write `eval/reports/langchain_comparison.md`: the table, plus 3 to 5 sentences explaining the biggest differences, with one real example.
 
 ## Done when
 - [ ] The report is committed

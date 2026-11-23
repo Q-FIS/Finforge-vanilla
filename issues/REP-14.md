@@ -1,16 +1,21 @@
 # [REP-14] (should) Read tables properly with pdfplumber
 labels: team:rep, size:M, should
 **Owner:** R3 · **Size:** M (2-3 days) · **Due:** day 12 · **Needs:** REP-01
-**This is a "should":** only start it when all your "must" issues are done.
+**This is a "should": only start it when all your other issues are done.**
 
-## In one sentence
-On pages with ruled tables, read each table as rows and columns and store it as one `table` block in markdown.
+## What is this, in plain words?
+PyMuPDF gives us a table as many small separate blocks, one per cell. We lose
+which number belongs to which row and column. `pdfplumber` can find tables
+drawn with lines and give them back as rows and columns. You turn each table
+into **one** block, written as a markdown table, so the chunker keeps it whole
+and the LLM can read it.
 
-## What to do
-1. With `pdfplumber`, find tables on each page (`page.find_tables()`). They work best with ruled lines, like the fixture's pages 3-5.
-2. Turn each table into a markdown table (`| a | b |` rows).
-3. Remove the normal text blocks that sit inside the table's bbox, and add one `Block(block_type="table", ...)` instead.
+## Step by step
+1. In a new function (in `src/rag/rep/parse.py` or a new `tables.py`), open the PDF with `pdfplumber.open(path)`. Add it with `uv add pdfplumber`; the lead reviews dependency changes.
+2. For each page, `page.find_tables()`. For each table, `table.extract()` gives a list of rows (lists of cell strings).
+3. Turn the rows into markdown: `| Particulars | FY2025 | FY2024 |`, then a `| --- | --- | --- |` line, then one line per row.
+4. In our `Page`: remove the blocks whose bbox is inside the table's bbox (`table.bbox`), and add one `Block(text=markdown, block_type="table", bbox=table.bbox, ...)` in their place, keeping the reading order.
 
 ## Done when
-- [ ] Pages 3, 4 and 5 of the fixture each produce one table block with the right rows
-- [ ] All parser tests still pass
+- [ ] Fixture pages 3, 4 and 5 each produce one `table` block with the right rows
+- [ ] All the parser tests still pass

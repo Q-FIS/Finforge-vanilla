@@ -1,7 +1,14 @@
 # The issues: every task, written out
 
-Each file in this folder is one task (one GitHub issue). Find your role
+**First read [`START_HERE.md`](START_HERE.md)** (15 minutes): what we're
+building, how one question flows through the system, the words we use, and how
+to work on an issue.
+
+Each other file in this folder is one task (one GitHub issue). Find your role
 (R1-R4, T1-T4, G1-G4, E1-E3) below and read your files in order of due day.
+Every issue has the same sections: what it is in plain words, where it fits,
+what you get and must give back (with an example), step by step, what to watch
+out for, how to test it, and when it's done.
 
 ## How to read an issue
 

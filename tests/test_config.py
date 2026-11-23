@@ -25,7 +25,7 @@ def write(tmp_path: Path, text: str) -> Path:
 def test_repo_configs_load():
     cfg = load_config(REPO / "config.yaml")
     assert cfg.chunk.strategy == "section"
-    assert cfg.llm.temperature == 0.0 and isinstance(cfg.llm.temperature, float)
+    assert cfg.llm.effort == "low"
     ci = load_config(REPO / "tests" / "ci.yaml")
     assert ci.embed.fake and ci.llm.fake
 
@@ -70,7 +70,7 @@ def test_bad_values_raise(data, fragment):
         ({"retrieve": {"k": 10, "depth": 5}}, "depth"),
         ({"context": {"order": "middle"}}, "gold_at"),
         ({"run_name": "my run"}, "run_name"),
-        ({"llm": {"temperature": -1}}, "temperature"),
+        ({"llm": {"max_tokens": 0}}, "llm.max_tokens"),
     ],
 )
 def test_contradictions_raise(data, fragment):
@@ -79,8 +79,8 @@ def test_contradictions_raise(data, fragment):
 
 
 def test_int_is_widened_to_float():
-    cfg = config_from_dict({"llm": {"temperature": 1}})
-    assert cfg.llm.temperature == 1.0 and isinstance(cfg.llm.temperature, float)
+    cfg = config_from_dict({"llm": {"timeout_s": 30}})
+    assert cfg.llm.timeout_s == 30.0 and isinstance(cfg.llm.timeout_s, float)
 
 
 def test_empty_section_is_allowed(tmp_path):

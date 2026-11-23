@@ -2,13 +2,15 @@
 labels: team:ret, size:S
 **Owner:** T2 · **Size:** S (1 day) · **Due:** day 11 · **Needs:** RET-05
 
-## In one sentence
-Measure search time and memory for 1 thousand up to 1 million chunks, numpy vs FAISS.
+## What is this, in plain words?
+People reach for "vector databases" very early. You measure when that's
+actually needed: how slow does brute-force search get as the number of chunks
+grows from a thousand to a million?
 
-## What to do
-1. Make random unit vectors of size 384 for N = 1,000, 10,000, 100,000 and 1,000,000.
-2. For each N, for numpy and FAISS: time to build, memory (N x 384 x 4 bytes), and the time of 100 searches (median and 95th percentile).
-3. Write `eval/reports/search_speed.md` with the table, and one sentence on how big N can get before brute-force search becomes too slow.
+## Step by step
+1. Write `scripts/search_speed.py`. For N = 1,000, 10,000, 100,000 and 1,000,000, make random vectors of size 384 and normalise them to length 1.
+2. For both our `DenseIndex` and FAISS `IndexFlatIP`, measure: time to build; memory (N × 384 × 4 bytes, since a float32 is 4 bytes); and the time of 100 searches with k=20 (median and 95th percentile, using `time.perf_counter()`).
+3. Write `eval/reports/search_speed.md`: the table, our real corpus's size marked on it, and one sentence on how big N can get before brute force becomes too slow (say, over 100 ms per search).
 
 ## Done when
-- [ ] The report is committed
+- [ ] The script and report are committed

@@ -93,8 +93,11 @@ class ContextConfig:
 class LLMConfig:
     provider: str = "anthropic"
     model: str = "claude-haiku-5-5"
-    temperature: float = 0.0
-    max_tokens: int = 512
+    # Haiku 5.5 does not accept a temperature setting (the API returns an
+    # error), so we control it with "effort" instead: how much the model
+    # thinks before answering. "low" is cheapest and fast.
+    effort: Literal["low", "medium", "high"] = "low"
+    max_tokens: int = 4000  # includes the model's thinking, so not too small
     timeout_s: float = 60.0
     cache: bool = True  # False for experiment E0
     fake: bool = False  # True = FakeLLM (no API key). Used in tests.
@@ -156,7 +159,7 @@ def config_from_dict(data: dict) -> Config:
 
     # Step 2: types. dacite builds the dataclasses and checks that every
     # value has the right type (and that a Literal gets one of its allowed
-    # words). cast=[float] lets you write `temperature: 0` instead of 0.0.
+    # words). cast=[float] lets you write `timeout_s: 60` instead of 60.0.
     try:
         cfg = dacite.from_dict(Config, data, config=dacite.Config(cast=[float], strict=True))
     except (dacite.DaciteError, ValueError) as e:
@@ -198,8 +201,8 @@ def check_values(cfg: Config) -> None:
         problems.append("retrieve.depth must be at least retrieve.k")
     if cfg.context.order != "rank" and not cfg.context.order.startswith("gold_at:"):
         problems.append("context.order must be 'rank' or 'gold_at:<position>'")
-    if cfg.llm.temperature < 0:
-        problems.append("llm.temperature cannot be negative")
+    if cfg.llm.max_tokens <= 0:
+        problems.append("llm.max_tokens must be more than 0")
     if not 0 < cfg.clean.header_footer_min_share <= 1:
         problems.append("clean.header_footer_min_share must be between 0 and 1")
     if problems:

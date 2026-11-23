@@ -1,15 +1,19 @@
-# [GEN-10] Does the model refuse when it should?
+# [GEN-10] Does the model say "I don't know" when it should?
 labels: team:gen, size:S
 **Owner:** G3 · **Size:** S (1 day) · **Due:** day 11 · **Needs:** GEN-07, GEN-01
 
-## In one sentence
-Give the real model 10 questions it **can't** answer from the passages, and check it says "insufficient_evidence".
+## What is this, in plain words?
+A good system admits when the documents don't contain the answer, instead of
+guessing. You test that with the real model: give it questions it **can't**
+answer from the passages provided, and count how often it correctly replies
+`insufficient_evidence`.
 
-## What to do
-1. Write 10 questions whose answer isn't in the passages you give, but the passages look related (for example, ask about FY2026 with FY2025 passages).
-2. Run them with the real model and count how many are refused correctly.
-3. If too few, improve the prompt in a **new** file, `grounded_v2.txt` (keep v1), and run again.
-4. Write `eval/reports/abstention.md` with the before and after numbers.
+## Step by step
+1. Write 10 questions whose answer is **not** in the passages you'll give, but where the passages look related. Examples: ask for FY2026 figures with FY2025 passages; ask for a subsidiary's figure with only the parent's passages; ask about something the report never mentions (R&D spend).
+2. For each, pick 3 to 5 related chunks, and run `build_context` + `generate_answer` with the real model.
+3. Count the correct refusals.
+4. If fewer than 8 out of 10 are refused, improve the prompt in a **new** file, `prompts/grounded_v2.txt` (keep v1 unchanged so results stay comparable), and run again.
+5. Write `eval/reports/abstention.md`: the 10 questions, what the model said before and after, and the prompt change you made.
 
 ## Done when
-- [ ] The report is committed
+- [ ] The report is committed (and `grounded_v2.txt`, if you made one)

@@ -42,6 +42,8 @@ explicit = true
 [tool.ruff]
 line-length = 100
 target-version = "py311"
+# The code in issues/*.md is example code laid out for reading; don't reformat it.
+extend-exclude = ["issues"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP"]

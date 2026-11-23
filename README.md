@@ -23,6 +23,8 @@ The last command runs the whole pipeline on a small synthetic report with fake
 models, and writes `.cache/runs/smoke/`. Open its `results.jsonl` and
 `metrics.json`: that's what every real run produces.
 
+**New here? Read [`issues/START_HERE.md`](issues/START_HERE.md) first.**
+
 ## How you work
 
 1. **Read your issue** in `issues/` (or on GitHub). It says what to build,

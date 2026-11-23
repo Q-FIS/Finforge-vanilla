@@ -28,6 +28,12 @@ would mostly measure noise. The club shares one API key, read from the
 cached on disk, so re-running a config costs nothing. Until GEN-01 lands,
 everything runs on `FakeLLM` (`llm.fake: true`).
 
+Haiku 5.5 rejects any `temperature` setting with an error, so there is no
+"temperature 0". Instead we set `effort: low` (how much the model thinks before
+answering). The model's thinking counts toward `max_tokens`, so that limit is
+4000, not 512. Because answers can still vary between runs, experiment E0
+measures that variation (the noise floor).
+
 ## D4. Corpus: Infosys, Asian Paints and Titan Company, FY2024 and FY2025
 Three sectors (IT services, paints/consumer, jewellery/retail). Each has
 listed subsidiaries and publishes standalone and consolidated statements, which
