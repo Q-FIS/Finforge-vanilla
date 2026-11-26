@@ -21,8 +21,9 @@ def build_context(hits: list[Hit], cfg: ContextConfig) -> Context:
     parts = []
     for number, hit in enumerate(hits, start=1):  # STUB(GEN-05): no budget yet
         tag = f"C{number}"
+        safe_text = hit.chunk.text.replace("</context>", "&lt;/context&gt;")
         passages.append(Passage(tag=tag, chunk=hit.chunk, n_tokens=len(hit.chunk.text.split())))
-        parts.append(f"[{tag}]\n{hit.chunk.text}")
+        parts.append(f"[{tag}]\n{safe_text}")
 
     text = "<context>\n" + "\n\n".join(parts) + "\n</context>"
     return Context(passages=passages, text=text, n_tokens=len(text.split()))

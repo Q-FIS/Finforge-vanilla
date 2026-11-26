@@ -93,4 +93,10 @@ def _parse_row(row: dict[str, str], where: str) -> RegistryEntry:
 
 def pdf_path(entry: RegistryEntry, pdf_dir: str | Path) -> Path:
     """Where this document's PDF is expected on disk."""
+    if not _ID.fullmatch(entry.doc_id):
+        raise RegistryError(f"doc_id '{entry.doc_id}' must use only a-z, 0-9 and '_'")
+    base = Path(pdf_dir).resolve()
+    target = (base / f"{entry.doc_id}.pdf").resolve()
+    if not target.is_relative_to(base):
+        raise RegistryError(f"doc_id '{entry.doc_id}' escapes pdf_dir")
     return Path(pdf_dir) / f"{entry.doc_id}.pdf"
