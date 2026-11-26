@@ -1,0 +1,15 @@
+# CI smoke run: the whole pipeline on the synthetic fixture report, with
+# fake models (no downloads, no API key). Output goes to a gitignored folder.
+run_name: smoke
+corpus:
+  registry: tests/fixtures/registry.csv
+  pdf_dir: tests/fixtures
+chunk:
+  strategy: fixed
+embed:
+  fake: true
+llm:
+  fake: true
+eval:
+  questions: tests/fixtures/questions.jsonl
+  runs_dir: .cache/runs
