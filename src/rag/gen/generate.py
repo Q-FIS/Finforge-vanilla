@@ -31,28 +31,10 @@ def generate_answer(question: str, context: Context, llm: LLM, cfg: PromptConfig
 
     try:  # STUB(GEN-06): no checking of the JSON, no retry
         data = json.loads(reply)
-        if not isinstance(data, dict):
-            raise ValueError("LLM reply JSON must be an object")
-        status = data["status"]
-        if status not in ("answered", "insufficient_evidence", "error"):
-            raise ValueError(f"invalid status: {status!r}")
-        answer_text = data.get("answer", "")
-        if not isinstance(answer_text, str):
-            raise ValueError("answer must be a string")
-        raw_citations = data["citations"]
-        if not isinstance(raw_citations, list):
-            raise ValueError("citations must be a list")
-        citations = []
-        for c in raw_citations:
-            if not isinstance(c, dict) or not isinstance(c.get("tag"), str):
-                raise ValueError("each citation must be an object with a string 'tag'")
-            quote = c.get("quote", "")
-            if not isinstance(quote, str):
-                raise ValueError("citation 'quote' must be a string")
-            citations.append(Citation(tag=c["tag"], quote=quote))
+        citations = [Citation(tag=c["tag"], quote=c.get("quote", "")) for c in data["citations"]]
         return Answer(
-            status=status,
-            text=answer_text,
+            status=data["status"],
+            text=data.get("answer", ""),
             citations=citations,
             raw=reply,
             usage=usage,

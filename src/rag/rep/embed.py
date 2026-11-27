@@ -46,15 +46,13 @@ class FakeEmbedder(Embedder):
         vectors = np.zeros((len(texts), self.dim), dtype=np.float32)
         for row, text in enumerate(texts):
             for word in text.lower().split():
-                digest = hashlib.blake2b(word.encode(), digest_size=8).digest()
-                position = int.from_bytes(digest, "big") % self.dim
+                position = int(hashlib.md5(word.encode()).hexdigest(), 16) % self.dim
                 vectors[row, position] += 1.0
-        norms = np.linalg.norm(vectors, axis=1, keepdims=True)
-        zero_rows = norms[:, 0] == 0
-        if np.any(zero_rows):
-            vectors[zero_rows, 0] = 1.0
-            norms[zero_rows, 0] = 1.0
-        vectors /= norms
+            length = np.linalg.norm(vectors[row])
+            if length == 0:  # empty text: use any fixed vector of length 1
+                vectors[row, 0] = 1.0
+            else:
+                vectors[row] /= length
         return vectors
 
 
