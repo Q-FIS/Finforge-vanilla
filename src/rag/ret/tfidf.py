@@ -10,9 +10,49 @@ STUB: search() returns the first k chunks with score 0.
 
 from __future__ import annotations
 
+import re
+
 import numpy as np
 
 from rag.schema import Chunk, Hit
+
+_STOPWORDS = {
+    "the",
+    "of",
+    "and",
+    "a",
+    "an",
+    "in",
+    "to",
+    "for",
+    "was",
+    "is",
+    "on",
+    "by",
+    "with",
+    "as",
+    "at",
+}
+
+_TOKEN_PATTERN = (
+    r"\d{4}-\d{2}"
+    r"|\d[\d,]*(?:\.\d+)?"
+    r"|[a-z][a-z0-9]*"
+    r"|₹|%"
+)
+
+
+def tokenize(text: str, remove_stopwords: bool = False) -> list[str]:
+    """Tokenize text while preserving financial terms and numbers."""
+    text = text.lower()
+    tokens = re.findall(_TOKEN_PATTERN, text)
+
+    tokens = [token.rstrip(",") for token in tokens]
+
+    if remove_stopwords:
+        tokens = [token for token in tokens if token not in _STOPWORDS]
+
+    return tokens
 
 
 class TfidfIndex:
