@@ -35,7 +35,6 @@ class DenseIndex:
             raise ValueError("vectors must have one row per chunk")
         if len(chunks) != len(vectors):
             raise ValueError(f"{len(chunks)} chunks but {len(vectors)} vectors")
-        vectors = np.ascontiguousarray(vectors, dtype=np.float32)
         return cls(chunks, vectors, model_name)
 
     def search(
